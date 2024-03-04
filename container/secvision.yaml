@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: secvision
+  name: secvision
+spec:
+  nodeSelector:
+    type: node1
+  containers:
+  - image: kali_secvision:latest
+    name: secvision
+    imagePullPolicy: Never
+    resources: {}
+    env:
+    - name: CODE
+      value: QIOE-Q0G3-LBH3
+    - name: SERVER_HOST
+      value: 10.10.10.200
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+
+status: {}
