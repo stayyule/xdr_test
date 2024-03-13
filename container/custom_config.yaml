@@ -1,0 +1,18 @@
+# namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: secvision
+---
+# ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: secvision-cm
+  namespace: secvision
+data:
+  # agent code and controller ip
+  verify-src-code: K60D-2XCT-MU0Z
+  verify-dst-code: PJRI-CGOL-YJ5U
+  secvision-server: 10.10.10.200

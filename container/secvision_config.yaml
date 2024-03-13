@@ -1,0 +1,322 @@
+# kali
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    vendor: secvision
+    app: kali
+    role: verify-src
+  name: verify-src-pod
+  namespace: secvision
+spec:
+  containers:
+  - image: 172.28.236.251:5000/secvision/kali:v1.1.0
+    name: verify-src-pod
+    resources: {}
+    env:
+    - name: CODE
+      valueFrom:
+        configMapKeyRef:
+          name: secvision-cm
+          key: verify-src-code
+    - name: SERVER_HOST
+      valueFrom:
+        configMapKeyRef:
+          name: secvision-cm
+          key: secvision-server
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+
+---
+# kali
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    vendor: secvision
+    app: kali
+    role: verify-dst
+  name: verify-dst-pod
+  namespace: secvision
+spec:
+  containers:
+  - image: 172.28.236.251:5000/secvision/kali:v1.1.0
+    name: verify-dst-pod
+    resources: {}
+    env:
+    - name: CODE
+      valueFrom:
+        configMapKeyRef:
+          name: secvision-cm
+          key: verify-dst-code
+    - name: SERVER_HOST
+      valueFrom:
+        configMapKeyRef:
+          name: secvision-cm
+          key: secvision-server
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+
+---
+# shiro
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-shiro
+  name: poc-shiro-dep
+  namespace: secvision
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      case: poc-shiro
+
+  template:
+    metadata:
+      labels:
+        case: poc-shiro
+    spec:
+      containers:
+      - image: 172.28.236.251:5000/secvision/shiro:v3.0.0-memory
+        name: shiro
+        ports:
+        - containerPort: 8080
+
+---
+# shiro-svc
+apiVersion: v1
+kind: Service
+metadata:
+  name: shiro-svc
+  namespace: secvision
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-shiro
+spec:
+  selector:
+    case: poc-shiro
+
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      nodePort: 30080
+
+  type: NodePort
+
+---
+# php-upload
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-php-upload
+  name: poc-php-upload-dep
+  namespace: secvision
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      case: poc-php-upload
+
+  template:
+    metadata:
+      labels:
+        case: poc-php-upload
+    spec:
+      containers:
+      - image: 172.28.236.251:5000/secvision/upload-labs:v3.0.0
+        name: php-upload
+        ports:
+        - containerPort: 80
+
+---
+# php-upload-svc
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-upload-svc
+  namespace: secvision
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-php-upload
+spec:
+  selector:
+    case: poc-php-upload
+
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      nodePort: 30081
+
+  type: NodePort
+
+---
+# jsp-upload
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-jsp-upload
+  name: poc-jsp-upload-dep
+  namespace: secvision
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      case: poc-jsp-upload
+
+  template:
+    metadata:
+      labels:
+        case: poc-jsp-upload
+    spec:
+      containers:
+      - image: 172.28.236.251:5000/secvision/tomcat:v3.0.0-8.5-jre8
+        name: jsp-upload
+        ports:
+        - containerPort: 8080
+
+---
+# jsp-upload-svc
+apiVersion: v1
+kind: Service
+metadata:
+  name: jsp-upload-svc
+  namespace: secvision
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-jsp-upload
+spec:
+  selector:
+    case: poc-jsp-upload
+
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      nodePort: 30082
+
+  type: NodePort
+
+---
+# rce-mysql
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poc-rce-mysql-dep
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-rce-mysql
+  namespace: secvision
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      case: poc-rce-mysql
+  template:
+    metadata:
+      labels:
+        case: poc-rce-mysql
+    spec:
+      containers:
+        - name: rce-mysql
+          image: 172.28.236.251:5000/secvision/javasec-mysql:v3.0.0
+          ports:
+          - containerPort: 3306
+          env:
+            - name: MYSQL_DATABASE
+              value: test
+            - name: MYSQL_ROOT_PASSWORD
+              value: woaini520
+            - name: MYSQL_ROOT_HOST
+              value: '%'
+
+---
+# rce-mysql-svc
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-svc
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-rce-mysql
+  namespace: secvision
+spec:
+  selector:
+    case: poc-rce-mysql
+
+  ports:
+    - port: 3306
+      targetPort: 3306
+      protocol: TCP
+
+---
+# rce
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poc-rce-dep
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-rce
+  namespace: secvision
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      case: poc-rce
+  template:
+    metadata:
+      labels:
+        case: poc-rce
+    spec:
+      containers:
+        - name: rce
+          image: 172.28.236.251:5000/secvision/javasec:v3.0.2
+          ports:
+          - containerPort: 8083
+          env:
+          - name: MYSQL_IP
+            value: mysql-svc
+---
+# rce-svc
+apiVersion: v1
+kind: Service
+metadata:
+  name: rce-svc
+  namespace: secvision
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-rce
+spec:
+  selector:
+    case: poc-rce
+
+  ports:
+    - port: 80
+      targetPort: 8083
+      protocol: TCP
+      nodePort: 30083
+
+  type: NodePort
