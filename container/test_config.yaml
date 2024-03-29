@@ -1,0 +1,693 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: maria-cm
+
+data:
+  DATABASE: 'db'
+  USER: 'wp'
+  PASSWORD: '123'
+  ROOT_PASSWORD: '123'
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: maria-dep
+  name: maria-dep
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: maria-dep
+
+  template:
+    metadata:
+      labels:
+        app: maria-dep
+    spec:
+      containers:
+      - image: mariadb:10
+        name: mariadb
+        ports:
+        - containerPort: 3306
+
+        envFrom:
+        - prefix: 'MARIADB_'
+          configMapRef:
+            name: maria-cm
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: maria-dep
+  name: maria-svc
+
+spec:
+  ports:
+  - port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    app: maria-dep
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wp-cm
+
+data:
+  HOST: 'maria-svc'
+  USER: 'wp'
+  PASSWORD: '123'
+  NAME: 'db'
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: wp-dep
+    test: 4-4
+  name: wp-dep
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wp-dep
+
+  template:
+    metadata:
+      labels:
+        app: wp-dep
+        test: 4-4
+    spec:
+      containers:
+      - image: wordpress:5
+        name: wordpress
+        ports:
+        - containerPort: 80
+
+        envFrom:
+        - prefix: 'WORDPRESS_DB_'
+          configMapRef:
+            name: wp-cm
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: wp-dep
+    test: 4-4
+  name: wp-svc
+
+spec:
+  ports:
+  - name: http80
+    port: 80
+    protocol: TCP
+    targetPort: 80
+
+  selector:
+    app: wp-dep
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: thinkphp-dep
+    test: 4-4
+  name: thinkphp-dep
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: thinkphp-dep
+
+  template:
+    metadata:
+      labels:
+        app: thinkphp-dep
+        test: 4-4
+    spec:
+      containers:
+      - image: vulhub/thinkphp:5.0.20
+        name: thinkphp-dep
+        ports:
+        - containerPort: 80
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: thinkphp-dep
+    test: 4-4
+  name: thinkphp-dep-svc
+
+spec:
+  ports:
+  - name: http80
+    port: 80
+    protocol: TCP
+    targetPort: 80
+
+  selector:
+    app: thinkphp-dep
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: euler-dep
+    test: 4-5
+  name: euler-dep
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: euler-dep
+
+  template:
+    metadata:
+      labels:
+        app: euler-dep
+        test: 4-5
+    spec:
+      containers:
+      - image: euleros:latest
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "while true; do sleep 3600; done;" ]
+        name: euleros-dep
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: centos-dep
+    test: 4-5
+  name: centos-dep
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: centos-dep
+
+  template:
+    metadata:
+      labels:
+        app: centos-dep
+        test: 4-5
+    spec:
+      containers:
+      - image: centos:latest
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "while true; do sleep 3600; done;" ]
+        name: centos-dep
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ubuntu-dep
+    test: 4-5
+  name: ubuntu-dep
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ubuntu-dep
+
+  template:
+    metadata:
+      labels:
+        app: ubuntu-dep
+        test: 4-5
+    spec:
+      containers:
+      - image: ubuntu:latest
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "while true; do sleep 3600; done;" ]
+        name: ubuntu-dep
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: alpine-dep
+    test: 4-5
+  name: alpine-dep
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alpine-dep
+
+  template:
+    metadata:
+      labels:
+        app: alpine-dep
+        test: 4-5
+    spec:
+      containers:
+      - image: alpine:latest
+        command: [ "/bin/sh", "-c", "--" ]
+        args: [ "while true; do sleep 3600; done;" ]
+        name: alpine-dep
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: python-dep
+    test: 4-5
+    cve: CVE-2017-8291
+  name: python-dep
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-dep
+
+  template:
+    metadata:
+      labels:
+        app: python-dep
+        test: 4-5
+        cve: CVE-2017-8291
+    spec:
+      containers:
+      - image: 172.28.236.251:5000/cve/python:PIL-CVE-2017-8291
+        name: python-dep
+        command: ["python", "app.py"]
+        ports:
+          - containerPort: 8000
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: python-dep
+    test: 4-5
+  name: python-dep-svc
+
+spec:
+  ports:
+  - name: python8000
+    port: 8000
+    protocol: TCP
+    targetPort: 8000
+
+  selector:
+    app: python-dep
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ruby-dep
+    test: 4-5
+    cve: CVE-2017-17405
+  name: ruby-dep
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ruby-dep
+
+  template:
+    metadata:
+      labels:
+        app: ruby-dep
+        test: 4-5
+        cve: CVE-2017-17405
+    spec:
+      containers:
+      - image: 172.28.236.251:5000/cve/ruby:CVE-2017-17405
+        name: ruby-dep
+        command: ["ruby", "web.rb", "-p", "8080", "-o", "0.0.0.0"]
+        ports:
+          - containerPort: 8080
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ruby-dep
+    test: 4-5
+  name: ruby-dep-svc
+
+spec:
+  ports:
+  - name: ruby8080
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+
+  selector:
+    app: ruby-dep
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: redis-dep
+    test: 4-5
+  name: redis-dep
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-dep
+
+  template:
+    metadata:
+      labels:
+        app: redis-dep
+        test: 4-5
+        user: 'default'
+        password: '123456'
+    spec:
+      containers:
+      - image: bitnami/redis:latest
+        name: redis-dep
+        env:
+          - name: REDIS_PASSWORD
+            value: '123456'
+        ports:
+          - containerPort: 6379
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: redis-dep
+    test: 4-5
+  name: redis-dep-svc
+
+spec:
+  ports:
+  - name: redis6379
+    port: 6379
+    protocol: TCP
+    targetPort: 6379
+
+  selector:
+    app: redis-dep
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: tomcat-dep
+    test: 4-5
+  name: tomcat-dep
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tomcat-dep
+
+  template:
+    metadata:
+      labels:
+        app: tomcat-dep
+        test: 4-5
+        user: 'user'
+        password: '123456'
+    spec:
+      containers:
+      - image: bitnami/tomcat:latest
+        name: tomcat-dep
+        env:
+          - name: TOMCAT_USERNAME
+            value: 'user'
+          - name: TOMCAT_PASSWORD
+            value: '123456'
+        ports:
+          - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: tomcat-dep
+    test: 4-5
+  name: tomcat-dep-svc
+
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+
+  selector:
+    app: tomcat-dep
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nodejs-dep
+    test: 4-5
+    cve: cve-2017-14849
+  name: nodejs-dep
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodejs-dep
+
+  template:
+    metadata:
+      labels:
+        app: nodejs-dep
+        test: 4-5
+        cve: cve-2017-14849
+    spec:
+      containers:
+      - image: 172.28.236.251:5000/cve/nodejs:CVE-2017-14849
+        name: nodejs-dep
+        command: ["npm", "run", "start"]
+        ports:
+          - containerPort: 3000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: nodejs-dep
+    test: 4-5
+  name: nodejs-dep-svc
+
+spec:
+  ports:
+  - name: nodejs3000
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+
+  selector:
+    app: nodejs-dep
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sshd-dep
+    test: 4-5
+  name: sshd-dep
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sshd-dep
+
+  template:
+    metadata:
+      labels:
+        app: sshd-dep
+        test: 4-5
+        user: 'root'
+        password: 'root'
+    spec:
+      containers:
+      - image: 172.28.236.251:5000/sshd:weakpwd
+        name: sshd-dep
+        command: ["/usr/sbin/sshd", "-D"]
+        ports:
+          - containerPort: 22
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: sshd-dep
+    test: 4-5
+  name: sshd-dep-svc
+
+spec:
+  selector:
+    app: sshd-dep
+  ports:
+  - name: sshd2222
+    port: 2222
+    protocol: TCP
+    targetPort: 22
+    nodePort: 30022
+
+  type: NodePort
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: php-dep
+    test: 4-5
+  name: php-dep
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: php-dep
+
+  template:
+    metadata:
+      labels:
+        app: php-dep
+        test: 4-5
+        user: 'root'
+        password: 'root'
+    spec:
+      containers:
+      - image: 172.28.236.251:5000/cve/php:CVE-2019-11043
+        name: sshd-dep
+        ports:
+          - containerPort: 9000
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: php-dep
+    test: 4-5
+  name: php-dep-svc
+
+spec:
+  selector:
+    app: php-dep
+  ports:
+  - name: php9000
+    port: 9000
+    protocol: TCP
+    targetPort: 9000
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: host-10m-pv
+
+spec:
+  storageClassName: host-test
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 10Mi
+  hostPath:
+    path: /root
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: host-5m-pvc
+
+spec:
+  storageClassName: host-test
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Mi
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: host-pvc-pod
+
+spec:
+  volumes:
+  - name: host-pvc-vol
+    persistentVolumeClaim:
+      claimName: host-5m-pvc
+
+  containers:
+    - name: ngx-pvc-pod
+      image: nginx:alpine
+      ports:
+      - containerPort: 80
+      volumeMounts:
+      - name: host-pvc-vol
+        mountPath: /tmp

@@ -13,6 +13,7 @@ metadata:
   namespace: secvision
 data:
   # agent code and controller ip
-  verify-src-code: K60D-2XCT-MU0Z
-  verify-dst-code: PJRI-CGOL-YJ5U
+  verify-src-code: XXXX-XXXX-XXXX
+  verify-dst-code: XXXX-XXXX-XXXX
+  verify-shell-code: XXXX-XXXX-XXXX
   secvision-server: 10.10.10.200

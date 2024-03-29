@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: malware-dep
+  name: malware-dep
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: malware-dep
+
+  template:
+    metadata:
+      labels:
+        app: malware-dep
+    spec:
+      containers:
+      - image: 172.28.236.251:5000/scan/malware:6152
+        name: malware
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "while true; do sleep 3600; done;" ]
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: webshell-dep
+  name: webshell-dep
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webshell-dep
+
+  template:
+    metadata:
+      labels:
+        app: webshell-dep
+    spec:
+      containers:
+      - image: 172.28.236.251:5000/scan/webshell:master
+        name: webshell
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "while true; do sleep 3600; done;" ]
