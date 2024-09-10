@@ -1,0 +1,424 @@
+# shiro
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-shiro
+  name: poc-shiro-dep
+  namespace: secvision
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      case: poc-shiro
+
+  template:
+    metadata:
+      labels:
+        case: poc-shiro
+    spec:
+      containers:
+      - image: 172.28.236.251:5000/secvision/shiro:v3.0.0-memory
+        name: shiro
+        ports:
+        - containerPort: 8080
+
+---
+# shiro-svc
+apiVersion: v1
+kind: Service
+metadata:
+  name: shiro-svc
+  namespace: secvision
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-shiro
+spec:
+  selector:
+    case: poc-shiro
+
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      nodePort: 30091
+
+  type: NodePort
+
+---
+
+# shiro
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-shiro-2
+  name: poc-shiro-dep-2
+  namespace: secvision
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      case: poc-shiro-2
+
+  template:
+    metadata:
+      labels:
+        case: poc-shiro-2
+    spec:
+      containers:
+      - image: 172.28.236.251:5000/secvision/shiro:v3.0.0-memory
+        name: shiro
+        ports:
+        - containerPort: 8080
+
+---
+# shiro-svc
+apiVersion: v1
+kind: Service
+metadata:
+  name: shiro-svc-2
+  namespace: secvision
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-shiro-2
+spec:
+  selector:
+    case: poc-shiro-2
+
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      nodePort: 30092
+
+  type: NodePort
+
+
+---
+
+# shiro
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-shiro-3
+  name: poc-shiro-dep-3
+  namespace: secvision
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      case: poc-shiro-3
+
+  template:
+    metadata:
+      labels:
+        case: poc-shiro-3
+    spec:
+      containers:
+      - image: 172.28.236.251:5000/secvision/shiro:v3.0.0-memory
+        name: shiro
+        ports:
+        - containerPort: 8080
+
+---
+# shiro-svc
+apiVersion: v1
+kind: Service
+metadata:
+  name: shiro-svc-3
+  namespace: secvision
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-shiro-3
+spec:
+  selector:
+    case: poc-shiro-3
+
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      nodePort: 30093
+
+  type: NodePort
+
+
+---
+
+# shiro
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-shiro-4
+  name: poc-shiro-dep-4
+  namespace: secvision
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      case: poc-shiro-4
+
+  template:
+    metadata:
+      labels:
+        case: poc-shiro-4
+    spec:
+      containers:
+      - image: 172.28.236.251:5000/secvision/shiro:v3.0.0-memory
+        name: shiro
+        ports:
+        - containerPort: 8080
+
+---
+# shiro-svc
+apiVersion: v1
+kind: Service
+metadata:
+  name: shiro-svc-4
+  namespace: secvision
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-shiro-4
+spec:
+  selector:
+    case: poc-shiro-4
+
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      nodePort: 30094
+
+  type: NodePort
+
+
+---
+# jboss cve-2017-12149
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poc-jboss-cve-2017-12149-dep
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-jboss-cve-2017-12149
+  namespace: secvision
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      case: poc-jboss-cve-2017-12149
+  template:
+    metadata:
+      labels:
+        case: poc-jboss-cve-2017-12149
+    spec:
+      containers:
+        - name: jboss-cve-2017-12149
+          image: 172.28.236.251:5000/secvision/jboss:v3.0.0-cve-2017-12149
+          ports:
+          - containerPort: 8080
+
+---
+# jboss-cve-2017-12149-svc
+apiVersion: v1
+kind: Service
+metadata:
+  name: jboss-cve-2017-12149-svc
+  namespace: secvision
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-jboss-cve-2017-12149
+spec:
+  selector:
+    case: poc-jboss-cve-2017-12149
+
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      nodePort: 30095
+
+  type: NodePort
+
+
+---
+# jboss cve-2017-7504
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poc-jboss-cve-2017-7504-dep
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-jboss-cve-2017-7504
+  namespace: secvision
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      case: poc-jboss-cve-2017-7504
+  template:
+    metadata:
+      labels:
+        case: poc-jboss-cve-2017-7504
+    spec:
+      containers:
+        - name: jboss-cve-2017-7504
+          image: 172.28.236.251:5000/secvision/jboss:v3.0.0-cve-2017-7504
+          ports:
+          - containerPort: 8080
+
+---
+# jboss-cve-2017-7504-svc
+apiVersion: v1
+kind: Service
+metadata:
+  name: jboss-cve-2017-7504-svc
+  namespace: secvision
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-jboss-cve-2017-7504
+spec:
+  selector:
+    case: poc-jboss-cve-2017-7504
+
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      nodePort: 30096
+
+  type: NodePort
+
+
+---
+# websphere
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poc-websphere-dep
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-websphere
+  namespace: secvision
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      case: poc-websphere
+  template:
+    metadata:
+      labels:
+        case: poc-websphere
+    spec:
+      containers:
+        - name: websphere
+          image: 172.28.236.251:5000/secvision/websphere:v3.0.0-filter-memory-webshell
+          ports:
+            - containerPort: 9443
+        - image: 172.28.236.251:5000/secvision/nginx:v3.0.0-generic-https-forward
+          name: nginx
+          command:
+            - "/bin/bash"
+            - "-c"
+            - "sed -i 's#https://web:ENV_HTTPS_PORT#https://127.0.0.1:9443#g' /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+          ports:
+            - containerPort: 80
+
+
+---
+# websphere-svc
+apiVersion: v1
+kind: Service
+metadata:
+  name: websphere-svc
+  namespace: secvision
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-websphere
+spec:
+  selector:
+    case: poc-websphere
+
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      nodePort: 30097
+
+  type: NodePort
+
+
+---
+# jetty
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poc-jetty-dep
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-jetty
+  namespace: secvision
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      case: poc-jetty
+  template:
+    metadata:
+      labels:
+        case: poc-jetty
+    spec:
+      containers:
+        - name: jetty
+          image: 172.28.236.251:5000/secvision/jetty:v3.0.0-9.4-filter-memory-webshell
+          ports:
+          - containerPort: 8080
+
+---
+# jetty-svc
+apiVersion: v1
+kind: Service
+metadata:
+  name: jetty-svc
+  namespace: secvision
+  labels:
+    vendor: secvision
+    app: poc
+    case: poc-jetty
+spec:
+  selector:
+    case: poc-jetty
+
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      nodePort: 30098
+
+  type: NodePort

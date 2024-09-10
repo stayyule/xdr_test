@@ -13,7 +13,7 @@ metadata:
   namespace: secvision
 data:
   # agent code and controller ip
-  verify-src-code: CUO1-398R-K2I9
-  verify-dst-code: JX5Z-ZH6T-G8HA
-  verify-shell-code: XUUC-98DL-J0YD
+  verify-src-code: 6G2L-UK2A-HAWQ
+  verify-dst-code: F30M-196C-LWYK
+  verify-shell-code: AT8J-J0TG-NY4X
   secvision-server: 172.28.248.252
