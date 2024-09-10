@@ -16,7 +16,7 @@ data:
   verify-src-host: qax-verify-src
   verify-dst-host: qax-verify-dst
   verify-shell-host: qax-verify-shell
-  verify-src-code: XXXX-XXXX-XXXX
-  verify-dst-code: XXXX-XXXX-XXXX
-  verify-shell-code: XXXX-XXXX-XXXX
-  secvision-server: 172.28.236.252
+  verify-src-code: ZWIK-W2EL-GHB4
+  verify-dst-code: VEC1-PMUI-4S36
+  verify-shell-code: SNVE-TVG9-VVS1
+  secvision-server: 172.28.248.252
