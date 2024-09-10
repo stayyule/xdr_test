@@ -13,9 +13,6 @@ metadata:
   namespace: secvision
 data:
   # agent code and controller ip
-  verify-src-host: qax-verify-src
-  verify-dst-host: qax-verify-dst
-  verify-shell-host: qax-verify-shell
   verify-src-code: XXXX-XXXX-XXXX
   verify-dst-code: XXXX-XXXX-XXXX
   verify-shell-code: XXXX-XXXX-XXXX
