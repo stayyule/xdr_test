@@ -7,12 +7,12 @@ metadata:
     vendor: secvision
     app: kali
     role: verify-src
-  name: verify-src-pod
+  name: yxzw-verify-src-pod
   namespace: secvision
 spec:
   containers:
   - image: 172.28.236.251:5000/secvision/kali:3.15
-    name: qax-verify-src-pod
+    name: yxzw-verify-src-pod
     env:
     - name: CODE
       valueFrom:
@@ -36,19 +36,49 @@ metadata:
   labels:
     vendor: secvision
     app: kali
-    role: verify-src
-  name: verify-src-pod
+    role: verify-dst
+  name: yxzw-verify-dst-pod
   namespace: secvision
 spec:
   containers:
   - image: 172.28.236.251:5000/secvision/kali:3.15
-    name: yxzw-verify-src-pod
+    name: yxzw-verify-dst-pod
     env:
     - name: CODE
       valueFrom:
         configMapKeyRef:
           name: secvision-cm
-          key: verify-src-code
+          key: verify-dst-code
+    - name: SERVER_HOST
+      valueFrom:
+        configMapKeyRef:
+          name: secvision-cm
+          key: secvision-server
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+---
+
+   
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    vendor: secvision
+    app: kali
+    role: verify-shell
+  name: yxzw-verify-shell-pod
+  namespace: secvision
+spec:
+  containers:
+  - image: 172.28.236.251:5000/secvision/kali:3.15
+    name: yxzw-verify-shell-pod
+    env:
+    - name: CODE
+      valueFrom:
+        configMapKeyRef:
+          name: secvision-cm
+          key: verify-shell-code
     - name: SERVER_HOST
       valueFrom:
         configMapKeyRef:

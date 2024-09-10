@@ -1,0 +1,19 @@
+# namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: secvision
+---
+# ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: secvision-cm
+  namespace: secvision
+data:
+  # agent code and controller ip
+  verify-src-code: D0BC-SABM-MMUF
+  verify-dst-code: AROR-1LVZ-RNXP
+  verify-shell-code: ZSF0-MJG7-HWMW
+  secvision-server: 172.28.248.252
