@@ -18,7 +18,7 @@ metadata:
   namespace: secvision
 spec:
   containers:
-  - image: 172.28.236.251:5000/secvision/kali:3.15
+  - image: 172.28.236.251:5000/secvision/kali:xch
     name: {vendor}-verify-{agent}-pod
     env:
     - name: CODE
@@ -31,6 +31,8 @@ spec:
         configMapKeyRef:
           name: secvision-cm
           key: secvision-server
+  nodeSelector:
+    node: test          
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 ---

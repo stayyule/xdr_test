@@ -25,7 +25,8 @@ spec:
         name: php-upload
         ports:
         - containerPort: 80
-
+      nodeSelector:
+        node: test
 ---
 # php-upload-svc
 apiVersion: v1
@@ -73,11 +74,12 @@ spec:
         case: poc-jsp-upload
     spec:
       containers:
-      - image: 172.28.236.251:5000/secvision/tomcat:v3.0.0-8.5-jre8
+      - image: 172.28.236.251:5000/secvision/tomcat:0912
         name: jsp-upload
         ports:
         - containerPort: 8080
-
+      nodeSelector:
+        node: test
 ---
 # jsp-upload-svc
 apiVersion: v1
@@ -134,7 +136,8 @@ spec:
               value: woaini520
             - name: MYSQL_ROOT_HOST
               value: '%'
-
+      nodeSelector:
+        node: test
 ---
 # rce-mysql-svc
 apiVersion: v1
@@ -184,6 +187,8 @@ spec:
           env:
           - name: MYSQL_IP
             value: mysql-svc
+      nodeSelector:
+        node: test
 ---
 # rce-svc
 apiVersion: v1
@@ -238,7 +243,8 @@ spec:
           privileged: true
         ports:
         - containerPort: 8080
-
+      nodeSelector:
+        node: test
 ---
 # shiro-privileged-svc
 apiVersion: v1

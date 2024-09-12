@@ -150,6 +150,8 @@ spec:
       - name: lgateway
         persistentVolumeClaim:
           claimName: lgateway
+      nodeSelector:
+        node: test            
 status:
   availableReplicas: 0
   replicas: 0
